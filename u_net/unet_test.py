@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
-import os, sys
-import torch
-import torchvision
-import numpy as np
+import os
+
 import cv2 as cv
+import numpy as np
+
 from unet_model import *
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -17,7 +16,7 @@ model_dict = unet.load_state_dict(torch.load(model_path))
 
 def test(unet):
     # model_dict=unet.load_state_dict(torch.load(model_path))
-    root_dir = './CrackForest-dataset-master/test/'
+    root_dir = 'D:/PycharmProjects/COMP9517-Surfing-Project/u_net/test_images'
     fileNames = os.listdir(root_dir)
     # print(fileNames)
     for f in fileNames:
@@ -52,7 +51,7 @@ def test(unet):
         # cv.waitKey(0)
         """将结果保存在测试seg目录下"""
         # result = cv.resize(np.uint8(predic_), (w, h))
-        result_image_path = os.path.join('./CrackForest-dataset-master/png_img_dir', f)  # 存放测试结果
+        result_image_path = os.path.join('D:/PycharmProjects/COMP9517-Surfing-Project/u_net/result_images', f)  # 存放测试结果
         cv.imwrite(result_image_path, result)
     # cv.destroyAllWindows()
 

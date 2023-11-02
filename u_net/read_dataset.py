@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
-import os, sys
-import numpy as np
+import os
+
 import cv2 as cv
-import torch
-from torch.utils.data import Dataset, DataLoader
 import matplotlib.pylab as plt
+import numpy as np
+import torch
+from torch.utils.data import DataLoader
 
 
 class SegmentationDataset(object):
