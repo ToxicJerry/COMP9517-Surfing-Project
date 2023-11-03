@@ -4,7 +4,7 @@ from unet_model import *
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 image_dir = 'D:/PycharmProjects/COMP9517-Surfing-Project/u_net/part_images'
-mask_dir = 'D:/PycharmProjects/COMP9517-Surfing-Project/u_net/dask_images/'
+mask_dir = '/u_net/mask_images/'
 dataloader = SegmentationDataset(image_dir, mask_dir)  # 数据读取
 
 train_loader = DataLoader(dataloader, batch_size=8, shuffle=False)

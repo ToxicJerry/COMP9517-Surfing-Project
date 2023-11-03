@@ -35,7 +35,6 @@ class SegmentationDataset(object):
             mask_path = self.masks[idx]
         img = cv.imread(image_path, cv.IMREAD_GRAYSCALE)  # BGR order
         mask = cv.imread(mask_path, cv.IMREAD_GRAYSCALE)
-        # print(img.shape)
         # 输入图像
         img = np.float32(img) / 255.0
         img = np.expand_dims(img, 0)
@@ -76,7 +75,7 @@ def imshow_image(mydata_loader):
 
 if __name__ == '__main__':
     image_dir = 'D:/PycharmProjects/COMP9517-Surfing-Project/u_net/part_images'
-    mask_dir = 'D:/PycharmProjects/COMP9517-Surfing-Project/u_net/dask_images/'
+    mask_dir = 'D:/PycharmProjects/COMP9517-Surfing-Project/u_net/mask_images/'
     dataloader = SegmentationDataset(image_dir=image_dir, mask_dir=mask_dir)
     mydata_loader = DataLoader(dataloader, batch_size=8, shuffle=False)
     imshow_image(mydata_loader)
