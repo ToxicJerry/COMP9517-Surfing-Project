@@ -86,4 +86,4 @@ class Unet(nn.Module):
 
 
 if __name__ == '__main__':
-    summary(Unet().to(device), input_size=(1, 320, 480), batch_size=-1)
+    summary(Unet().to(device), input_size=(1, 320, 320), batch_size=-1)
