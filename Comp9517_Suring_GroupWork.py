@@ -90,7 +90,6 @@ opt = SGD(learning_rate=0.01)
 model.compile(optimizer=opt, 
              loss='categorical_crossentropy',
              metrics=['accuracy'])
-<<<<<<< HEAD
 #fit
 history = model.fit(Image_data_gen.flow(X_train,y_train,batch_size=8),epochs=30,steps_per_epoch=len(X_train)//8,validation_data=(X_test,y_test))
 #model.summary()
@@ -107,71 +106,4 @@ plt.plot(history.history['val_loss'])
 plt.title("Loss")
 plt.legend(['Train','Test'],loc="upper left")
 plt.show()
-=======
-
-
-# The following code begins model training：
-
-# 1. Test all data sets
-# model.fit(Image_data_gen.flow(X_train,y_train, batch_size=32),epochs=5,steps_per_epoch=len(X_train)//32,validation_data=(X_test,y_test))
-# Result:
-# (envName) masisi@MacBook-Pro COMP9517-Surfing-Project % python Comp9517_Suring_GroupWork.py
-# Epoch 1/5
-# 61/61 [==============================] - 123s 2s/step - loss: 0.6914 - accuracy: 0.7169 - val_loss: 0.5057 - val_accuracy: 0.7500
-# Epoch 2/5
-# 61/61 [==============================] - 122s 2s/step - loss: 0.5278 - accuracy: 0.7634 - val_loss: 0.5440 - val_accuracy: 0.7561
-# Epoch 3/5
-# 61/61 [==============================] - 122s 2s/step - loss: 0.5288 - accuracy: 0.7655 - val_loss: 0.5040 - val_accuracy: 0.7637
-# Epoch 4/5
-# 61/61 [==============================] - 137s 2s/step - loss: 0.5105 - accuracy: 0.7831 - val_loss: 0.4592 - val_accuracy: 0.8110
-# Epoch 5/5
-# 61/61 [==============================] - 138s 2s/step - loss: 0.5039 - accuracy: 0.7810 - val_loss: 0.4790 - val_accuracy: 0.7698
-
-# 2. Test 2/3 data set
-# # Split the data set into 2/3 training data and 1/3 test data
-# X_train_2_3, X_test_1_3, y_train_2_3, y_test_1_3 = train_test_split(images, proba, test_size=1/3, stratify=proba, random_state=42)
-# # Change the dimension to 4D
-# X_train_2_3 = X_train_2_3.reshape(X_train_2_3.shape[0], X_train_2_3.shape[1], X_train_2_3.shape[2], 1)
-# X_test_1_3 = X_test_1_3.reshape(X_test_1_3.shape[0], X_test_1_3.shape[1], X_test_1_3.shape[2], 1)
-# # Ensure labels are one-hot encoded
-# y_train_2_3 = to_categorical(y_train_2_3, num_classes=4)
-# y_test_1_3 = to_categorical(y_test_1_3, num_classes=4)
-# # Operational model training
-# model.fit(Image_data_gen.flow(X_train_2_3, y_train_2_3, batch_size=32), epochs=5, steps_per_epoch=len(X_train_2_3)//32, validation_data=(X_test_1_3, y_test_1_3))
-# Result:
-# (envName) masisi@MacBook-Pro COMP9517-Surfing-Project % python Comp9517_Suring_GroupWork.py
-# Epoch 1/5
-# 54/54 [==============================] - 119s 2s/step - loss: 30.9215 - accuracy: 0.6278 - val_loss: 0.7718 - val_accuracy: 0.6629
-# Epoch 2/5
-# 54/54 [==============================] - 114s 2s/step - loss: 0.6766 - accuracy: 0.6942 - val_loss: 0.5994 - val_accuracy: 0.7303
-# Epoch 3/5
-# 54/54 [==============================] - 113s 2s/step - loss: 0.6263 - accuracy: 0.7135 - val_loss: 0.6263 - val_accuracy: 0.7303
-# Epoch 4/5
-# 54/54 [==============================] - 114s 2s/step - loss: 0.6359 - accuracy: 0.7082 - val_loss: 0.5779 - val_accuracy: 0.7383
-# Epoch 5/5
-# 54/54 [==============================] - 114s 2s/step - loss: 0.5913 - accuracy: 0.7187 - val_loss: 0.6211 - val_accuracy: 0.6720
-
-# 3. Test 1/3 data set
-X_train_1_3, X_test_2_3, y_train_1_3, y_test_2_3 = train_test_split(images, proba, test_size=2/3, stratify=proba, random_state=42)
-# NumpyArrayIterator requires input data to have four dimensions (number of samples, image height, image width, and number of channels), and X_train_1_3 is three-dimensional. 
-# Therefore, it is necessary to change X_train_1_3 from three-dimensional to four-dimensional by adding the number of channels in the last dimension.
-X_train_1_3 = np.expand_dims(X_train_1_3, axis=-1)
-X_test_2_3 = np.expand_dims(X_test_2_3, axis=-1)
-# Labels y_train_1_3 and y_test_2_3 have been thermally coded
-y_train_1_3 = to_categorical(y_train_1_3, num_classes=4)
-y_test_2_3 = to_categorical(y_test_2_3, num_classes=4)
-model.fit(Image_data_gen.flow(X_train_1_3, y_train_1_3, batch_size=32), epochs=5, steps_per_epoch=len(X_train_1_3)//32, validation_data=(X_test_2_3, y_test_2_3))
-# Result:
-# (envName) masisi@MacBook-Pro COMP9517-Surfing-Project % python Comp9517_Suring_GroupWork.py
-# Epoch 1/5
-# 27/27 [==============================] - 77s 3s/step - loss: 9.5415 - accuracy: 0.5950 - val_loss: 0.6131 - val_accuracy: 0.7274
-# Epoch 2/5
-# 27/27 [==============================] - 76s 3s/step - loss: 0.6194 - accuracy: 0.7150 - val_loss: 0.6274 - val_accuracy: 0.7274
-# Epoch 3/5
-# 27/27 [==============================] - 76s 3s/step - loss: 0.6326 - accuracy: 0.6936 - val_loss: 0.6216 - val_accuracy: 0.7274
-# Epoch 4/5
-# 27/27 [==============================] - 76s 3s/step - loss: 0.6248 - accuracy: 0.7055 - val_loss: 0.6246 - val_accuracy: 0.7274
-# Epoch 5/5
-# 27/27 [==============================] - 76s 3s/step - loss: 0.6013 - accuracy: 0.7067 - val_loss: 0.5832 - val_accuracy: 0.7274
->>>>>>> 31b5fb32b25ff0f01052d703fa88c719eae8a527
 #model.summary()
