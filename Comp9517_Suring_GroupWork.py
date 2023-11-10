@@ -144,6 +144,145 @@ print(confusion)
 #plt.ylabel("accuracy")
 #plt.legend(['Train','Test'],loc="upper left")
 #plt.show()
+print("Confusion Matrix for All Images:")
+print(f1_score)
+print(confusion)
+labels = ["Class 0", "Class 1", "Class 2", "Class 3"]  
+for i in range(len(labels)):
+    for j in range(len(labels)):
+        label_str = f"{labels[i]} (Actual) vs {labels[j]} (Predicted)"
+        print(f"{label_str}: {confusion[i, j]}")
+# Confusion Matrix for All Images:
+#                 precision    recall  f1-score   support
+
+#            0       0.67      0.89      0.77       377
+#            1       0.00      0.00      0.00        74
+#            2       0.00      0.00      0.00        26
+#            3       0.65      0.56      0.60       179
+
+#     accuracy                           0.67       656
+#    macro avg       0.33      0.36      0.34       656
+# weighted avg       0.56      0.67      0.61       656
+
+# [[337   0   0  40]
+#  [ 65   0   0   9]
+#  [ 21   0   0   5]
+#  [ 78   0   0 101]]
+# Class 0 (Actual) vs Class 0 (Predicted): 337
+# Class 0 (Actual) vs Class 1 (Predicted): 0
+# Class 0 (Actual) vs Class 2 (Predicted): 0
+# Class 0 (Actual) vs Class 3 (Predicted): 40
+# Class 1 (Actual) vs Class 0 (Predicted): 65
+# Class 1 (Actual) vs Class 1 (Predicted): 0
+# Class 1 (Actual) vs Class 2 (Predicted): 0
+# Class 1 (Actual) vs Class 3 (Predicted): 9
+# Class 2 (Actual) vs Class 0 (Predicted): 21
+# Class 2 (Actual) vs Class 1 (Predicted): 0
+# Class 2 (Actual) vs Class 2 (Predicted): 0
+# Class 2 (Actual) vs Class 3 (Predicted): 5
+# Class 3 (Actual) vs Class 0 (Predicted): 78
+# Class 3 (Actual) vs Class 1 (Predicted): 0
+# Class 3 (Actual) vs Class 2 (Predicted): 0
+# Class 3 (Actual) vs Class 3 (Predicted): 101
+
+
+# Select only the monocrystalline image and calculate the confusion matrix
+monocrystalline_indices = np.where(y_test == 0)
+X_test_monocrystalline = X_test[monocrystalline_indices]
+y_test_monocrystalline = y_test[monocrystalline_indices]
+y_pred_monocrystalline = model.predict(X_test_monocrystalline)
+predicted_labels_monocrystalline = np.argmax(y_pred_monocrystalline, axis=1)
+# confusion_monocrystalline = confusion_matrix(y_test_monocrystalline, predicted_labels_monocrystalline)
+f1_score_monocrystalline = classification_report(y_test_monocrystalline, predicted_labels_monocrystalline)
+confusion_monocrystalline = np.zeros((4, 4), dtype=int)
+for actual, predicted in zip(y_test_monocrystalline, predicted_labels_monocrystalline):
+    confusion_monocrystalline[actual, predicted] += 1
+print("Confusion Matrix for Monocrystalline Images:")
+print(f1_score_monocrystalline)
+print(confusion_monocrystalline)
+labels_mono = ["Class 0", "Class 1"]  # the class label with a single crystal
+for i in range(len(labels_mono)):
+    for j in range(len(labels_mono)):
+        label_str = f"{labels_mono[i]} (Actual) vs {labels_mono[j]} (Predicted)"
+        print(f"{label_str}: {confusion_monocrystalline[i, j]}")
+# Confusion Matrix for Monocrystalline Images:
+#                precision    recall  f1-score   support
+
+#            0       1.00      0.89      0.94       377
+#            3       0.00      0.00      0.00         0
+
+#     accuracy                           0.89       377
+#    macro avg       0.50      0.45      0.47       377
+# weighted avg       1.00      0.89      0.94       377
+
+# [[337   0   0  40]
+#  [  0   0   0   0]
+#  [  0   0   0   0]
+#  [  0   0   0   0]]
+# Class 0 (Actual) vs Class 0 (Predicted): 337
+# Class 0 (Actual) vs Class 1 (Predicted): 0
+# Class 1 (Actual) vs Class 0 (Predicted): 0
+# Class 1 (Actual) vs Class 1 (Predicted): 0
+
+# Select only the polycrystalline images and calculate the confusion matrix
+polycrystalline_indices = np.where(y_test == 1)
+X_test_polycrystalline = X_test[polycrystalline_indices]
+y_test_polycrystalline = y_test[polycrystalline_indices]
+y_pred_polycrystalline = model.predict(X_test_polycrystalline)
+predicted_labels_polycrystalline = np.argmax(y_pred_polycrystalline, axis=1)
+# confusion_polycrystalline = confusion_matrix(y_test_polycrystalline, predicted_labels_polycrystalline)
+f1_score_polycrystalline = classification_report(y_test_polycrystalline, predicted_labels_polycrystalline)
+confusion_polycrystalline = np.zeros((4, 4), dtype=int)
+for actual, predicted in zip(y_test_polycrystalline, predicted_labels_polycrystalline):
+    confusion_polycrystalline[actual, predicted] += 1
+print("Confusion Matrix for Polycrystalline Images:")
+print(f1_score_polycrystalline)
+print(confusion_polycrystalline)
+labels_poly = ["Class 0", "Class 1", "Class 2", "Class 3"]  # the class label for polycrystals
+for i in range(len(labels_poly)):
+    for j in range(len(labels_poly)):
+        label_str = f"{labels_poly[i]} (Actual) vs {labels_poly[j]} (Predicted)"
+        print(f"{label_str}: {confusion_polycrystalline[i, j]}")
+# Confusion Matrix for Polycrystalline Images:
+#                precision    recall  f1-score   support
+
+#            0       0.00      0.00      0.00       0.0
+#            1       0.00      0.00      0.00      74.0
+#            3       0.00      0.00      0.00       0.0
+
+#     accuracy                           0.00      74.0
+#    macro avg       0.00      0.00      0.00      74.0
+# weighted avg       0.00      0.00      0.00      74.0
+
+# [[ 0  0  0  0]
+#  [65  0  0  9]
+#  [ 0  0  0  0]
+#  [ 0  0  0  0]]
+# Class 0 (Actual) vs Class 0 (Predicted): 0
+# Class 0 (Actual) vs Class 1 (Predicted): 0
+# Class 0 (Actual) vs Class 2 (Predicted): 0
+# Class 0 (Actual) vs Class 3 (Predicted): 0
+# Class 1 (Actual) vs Class 0 (Predicted): 65
+# Class 1 (Actual) vs Class 1 (Predicted): 0
+# Class 1 (Actual) vs Class 2 (Predicted): 0
+# Class 1 (Actual) vs Class 3 (Predicted): 9
+# Class 2 (Actual) vs Class 0 (Predicted): 0
+# Class 2 (Actual) vs Class 1 (Predicted): 0
+# Class 2 (Actual) vs Class 2 (Predicted): 0
+# Class 2 (Actual) vs Class 3 (Predicted): 0
+# Class 3 (Actual) vs Class 0 (Predicted): 0
+# Class 3 (Actual) vs Class 1 (Predicted): 0
+# Class 3 (Actual) vs Class 2 (Predicted): 0
+# Class 3 (Actual) vs Class 3 (Predicted): 0
+
+
+plt.plot(history.history['accuracy'])
+plt.plot(history.history["val_accuracy"])
+plt.title("accuracy")
+plt.xlabel("epoch")
+plt.ylabel("accuracy")
+plt.legend(['Train','Test'],loc="upper left")
+plt.show()
 
 #plt.plot(history.history['loss'])
 #plt.plot(history.history['val_loss'])
