@@ -65,10 +65,6 @@ for i in range(len(temp_X)):
     temp_X[i] = cv2.warpAffine(X_train[i], rotation_matrix, (cols, rows))
 new_X_train = np.concatenate([new_X_train, temp_X])
 new_y_train = np.concatenate([new_y_train, temp_y])
-#class_indices = np.where(new_y_train == 1)[0]
-#samples_to_copy = np.random.choice(class_indices, size=200, replace=False)
-#new_X_train = np.concatenate([new_X_train, new_X_train[samples_to_copy]])
-#new_y_train = np.concatenate([new_y_train, new_y_train[samples_to_copy]])
 # Fianlly, add some noise on the original image, now we get around 10K train set
 temp_X = X_train.copy()
 temp_y = y_train.copy()
@@ -77,17 +73,13 @@ for i in range(len(temp_X)):
     temp_X[i] = np.clip(X_train[i] + noise, 0, 255).astype(np.float32)
 new_X_train = np.concatenate([new_X_train, temp_X])
 new_y_train = np.concatenate([new_y_train, temp_y])
-for i in range(8):
-    class_indices = np.where(new_y_train == 2)[0]
-    samples_to_copy = np.random.choice(class_indices, size=200, replace=False)
-    new_X_train = np.concatenate([new_X_train, new_X_train[samples_to_copy]])
-    new_y_train = np.concatenate([new_y_train, new_y_train[samples_to_copy]])
-class_indices = np.where(new_y_train == 1)[0]
-samples_to_copy = np.random.choice(class_indices, size=1000, replace=False)
+# add some extra class 1 and 2 images
+class_indices = np.where(new_y_train == 2)[0]
+samples_to_copy = np.random.choice(class_indices, size=240, replace=False)
 new_X_train = np.concatenate([new_X_train, new_X_train[samples_to_copy]])
 new_y_train = np.concatenate([new_y_train, new_y_train[samples_to_copy]])
-class_indices = np.where(new_y_train == 3)[0]
-samples_to_copy = np.random.choice(class_indices, size=1000, replace=False)
+class_indices = np.where(new_y_train == 1)[0]
+samples_to_copy = np.random.choice(class_indices, size=200, replace=False)
 new_X_train = np.concatenate([new_X_train, new_X_train[samples_to_copy]])
 new_y_train = np.concatenate([new_y_train, new_y_train[samples_to_copy]])
 # make sure all images are float 32
@@ -138,7 +130,6 @@ checkpoint = ModelCheckpoint('big_best_model.h5',
                              mode='max',  #
                              verbose=1)  
 #history = model.fit(new_X_train,new_y_train,batch_size=64, epochs=30,validation_split=0.2,callbacks=[checkpoint])
-#history = model.fit(new_X_train,new_y_train,batch_size=32, epochs=30,validation_split=0.2)
 best_model = load_model('big_best_model.h5')
 # predict
 y_pred = best_model.predict(X_test)
@@ -148,17 +139,150 @@ y_test = y_test.astype(int)
 f1_score = classification_report(y_test, predicted_labels)
 confusion  = confusion_matrix(y_test,predicted_labels)
 
-# print the result
+#plt.plot(history.history['accuracy'])
+#plt.plot(history.history["val_accuracy"])
+#plt.title("accuracy")
+#plt.xlabel("epoch")
+#plt.ylabel("accuracy")
+#plt.legend(['Train','Test'],loc="upper left")
+#plt.show()
+print("Confusion Matrix for All Images:")
 print(f1_score)
 print(confusion)
+labels = ["Class 0", "Class 1", "Class 2", "Class 3"]  
+for i in range(len(labels)):
+    for j in range(len(labels)):
+        label_str = f"{labels[i]} (Actual) vs {labels[j]} (Predicted)"
+        print(f"{label_str}: {confusion[i, j]}")
+# Test Result:
+# Confusion Matrix for All Images:
+#               precision    recall  f1-score   support
 
-#f1_score1 = classification_report(y_test, fake_labels)
-#confusion1  = confusion_matrix(y_test,fake_labels)
+#            0       0.69      0.90      0.78       377
+#            1       0.35      0.15      0.21        74
+#            2       0.10      0.08      0.09        26
+#            3       0.78      0.50      0.61       179
 
-#print("current model Confusion Matrix for All Images:")
-#print(f1_score1)
-#print(confusion1)
+#     accuracy                           0.67       656
+#    macro avg       0.48      0.41      0.42       656
+# weighted avg       0.65      0.67      0.64       656
 
+# [[340   9   9  19]
+#  [ 57  11   4   2]
+#  [ 18   2   2   4]
+#  [ 76   9   5  89]]
+# Class 0 (Actual) vs Class 0 (Predicted): 340
+# Class 0 (Actual) vs Class 1 (Predicted): 9
+# Class 0 (Actual) vs Class 2 (Predicted): 9
+# Class 0 (Actual) vs Class 3 (Predicted): 19
+# Class 1 (Actual) vs Class 0 (Predicted): 57
+# Class 1 (Actual) vs Class 1 (Predicted): 11
+# Class 1 (Actual) vs Class 2 (Predicted): 4
+# Class 1 (Actual) vs Class 3 (Predicted): 2
+# Class 2 (Actual) vs Class 0 (Predicted): 18
+# Class 2 (Actual) vs Class 1 (Predicted): 2
+# Class 2 (Actual) vs Class 2 (Predicted): 2
+# Class 2 (Actual) vs Class 3 (Predicted): 4
+# Class 3 (Actual) vs Class 0 (Predicted): 76
+# Class 3 (Actual) vs Class 1 (Predicted): 9
+# Class 3 (Actual) vs Class 2 (Predicted): 5
+# Class 3 (Actual) vs Class 3 (Predicted): 89
+
+
+# Select only the monocrystalline image and calculate the confusion matrix
+monocrystalline_indices = np.where(types == 'mono')[0]
+
+X_test_monocrystalline = X_test[monocrystalline_indices[monocrystalline_indices < len(X_test)]]
+y_test_monocrystalline = y_test[monocrystalline_indices[monocrystalline_indices < len(y_test)]]
+y_pred_monocrystalline = best_model.predict(X_test_monocrystalline)
+predicted_labels_monocrystalline = np.argmax(y_pred_monocrystalline, axis=1)
+# confusion_monocrystalline = confusion_matrix(y_test_monocrystalline, predicted_labels_monocrystalline)
+f1_score_monocrystalline = classification_report(y_test_monocrystalline, predicted_labels_monocrystalline)
+confusion_monocrystalline = np.zeros((4, 4), dtype=int)
+for actual, predicted in zip(y_test_monocrystalline, predicted_labels_monocrystalline):
+    confusion_monocrystalline[actual, predicted] += 1
+print("Confusion Matrix for Monocrystalline Images:")
+print(f1_score_monocrystalline)
+print(confusion_monocrystalline)
+labels_mono = ["Class 0", "Class 1"]  # the class label with a single crystal
+for i in range(len(labels_mono)):
+    for j in range(len(labels_mono)):
+        label_str = f"{labels_mono[i]} (Actual) vs {labels_mono[j]} (Predicted)"
+        print(f"{label_str}: {confusion_monocrystalline[i, j]}")
+# Test Result:
+# Confusion Matrix for Monocrystalline Images:
+#               precision    recall  f1-score   support
+
+#            0       0.67      0.89      0.76       135
+#            1       0.44      0.12      0.20        32
+#            2       0.10      0.11      0.11         9
+#            3       0.73      0.47      0.57        64
+
+#     accuracy                           0.65       240
+#    macro avg       0.49      0.40      0.41       240
+# weighted avg       0.63      0.65      0.61       240
+
+# [[120   2   4   9]
+#  [ 25   4   3   0]
+#  [  6   0   1   2]
+#  [ 29   3   2  30]]
+# Class 0 (Actual) vs Class 0 (Predicted): 120
+# Class 0 (Actual) vs Class 1 (Predicted): 2
+# Class 1 (Actual) vs Class 0 (Predicted): 25
+# Class 1 (Actual) vs Class 1 (Predicted): 4
+
+# Select only the polycrystalline images and calculate the confusion matrix
+polycrystalline_indices = np.where(types == 'poly')[0]
+X_test_polycrystalline = X_test[polycrystalline_indices[polycrystalline_indices < len(X_test)]]
+y_test_polycrystalline = y_test[polycrystalline_indices[polycrystalline_indices < len(y_test)]]
+y_pred_polycrystalline = best_model.predict(X_test_polycrystalline)
+predicted_labels_polycrystalline = np.argmax(y_pred_polycrystalline, axis=1)
+# confusion_polycrystalline = confusion_matrix(y_test_polycrystalline, predicted_labels_polycrystalline)
+f1_score_polycrystalline = classification_report(y_test_polycrystalline, predicted_labels_polycrystalline)
+confusion_polycrystalline = np.zeros((4, 4), dtype=int)
+for actual, predicted in zip(y_test_polycrystalline, predicted_labels_polycrystalline):
+    confusion_polycrystalline[actual, predicted] += 1
+print("Confusion Matrix for Polycrystalline Images:")
+print(f1_score_polycrystalline)
+print(confusion_polycrystalline)
+labels_poly = ["Class 0", "Class 1", "Class 2", "Class 3"]  # the class label for polycrystals
+for i in range(len(labels_poly)):
+    for j in range(len(labels_poly)):
+        label_str = f"{labels_poly[i]} (Actual) vs {labels_poly[j]} (Predicted)"
+        print(f"{label_str}: {confusion_polycrystalline[i, j]}")
+# Test Result:
+# Confusion Matrix for Polycrystalline Images:
+#               precision    recall  f1-score   support
+
+#            0       0.71      0.91      0.80       242
+#            1       0.32      0.17      0.22        42
+#            2       0.10      0.06      0.07        17
+#            3       0.81      0.51      0.63       115
+
+#     accuracy                           0.69       416
+#    macro avg       0.48      0.41      0.43       416
+# weighted avg       0.67      0.69      0.66       416
+
+# [[220   7   5  10]
+#  [ 32   7   1   2]
+#  [ 12   2   1   2]
+#  [ 47   6   3  59]]
+# Class 0 (Actual) vs Class 0 (Predicted): 220
+# Class 0 (Actual) vs Class 1 (Predicted): 7
+# Class 0 (Actual) vs Class 2 (Predicted): 5
+# Class 0 (Actual) vs Class 3 (Predicted): 10
+# Class 1 (Actual) vs Class 0 (Predicted): 32
+# Class 1 (Actual) vs Class 1 (Predicted): 7
+# Class 1 (Actual) vs Class 2 (Predicted): 1
+# Class 1 (Actual) vs Class 3 (Predicted): 2
+# Class 2 (Actual) vs Class 0 (Predicted): 12
+# Class 2 (Actual) vs Class 1 (Predicted): 2
+# Class 2 (Actual) vs Class 2 (Predicted): 1
+# Class 2 (Actual) vs Class 3 (Predicted): 2
+# Class 3 (Actual) vs Class 0 (Predicted): 47
+# Class 3 (Actual) vs Class 1 (Predicted): 6
+# Class 3 (Actual) vs Class 2 (Predicted): 3
+# Class 3 (Actual) vs Class 3 (Predicted): 59
 
 #plt.plot(history.history['accuracy'])
 #plt.plot(history.history["val_accuracy"])
