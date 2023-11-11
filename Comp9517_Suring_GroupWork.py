@@ -65,24 +65,23 @@ for i in range(len(temp_X)):
     temp_X[i] = cv2.warpAffine(X_train[i], rotation_matrix, (cols, rows))
 new_X_train = np.concatenate([new_X_train, temp_X])
 new_y_train = np.concatenate([new_y_train, temp_y])
-# Now,we got 7968 images for taining; 4524 for class 0; 884 for class 1 ; 320 for class 2 ; 2144 for class 3
-# copy 300 images from class 2
+# Fianlly, add some noise on the original image, now we get around 10K train set
+temp_X = X_train.copy()
+temp_y = y_train.copy()
+for i in range(len(temp_X)):
+    noise = np.random.normal(loc=0, scale=15, size=X_train[i].shape)
+    temp_X[i] = np.clip(X_train[i] + noise, 0, 255).astype(np.float32)
+new_X_train = np.concatenate([new_X_train, temp_X])
+new_y_train = np.concatenate([new_y_train, temp_y])
+# add some extra class 1 and 2 images
 class_indices = np.where(new_y_train == 2)[0]
 samples_to_copy = np.random.choice(class_indices, size=240, replace=False)
 new_X_train = np.concatenate([new_X_train, new_X_train[samples_to_copy]])
 new_y_train = np.concatenate([new_y_train, new_y_train[samples_to_copy]])
 class_indices = np.where(new_y_train == 1)[0]
-samples_to_copy = np.random.choice(class_indices, size=300, replace=False)
+samples_to_copy = np.random.choice(class_indices, size=200, replace=False)
 new_X_train = np.concatenate([new_X_train, new_X_train[samples_to_copy]])
 new_y_train = np.concatenate([new_y_train, new_y_train[samples_to_copy]])
-# Fianlly, add some noise on the image, now we get around 10K train set
-temp_X = X_train.copy()
-temp_y = y_train.copy()
-for i in range(len(temp_X)):
-    noise = np.random.normal(loc=0, scale=10, size=X_train[i].shape)
-    temp_X[i] = np.clip(X_train[i] + noise, 0, 255).astype(np.float32)
-new_X_train = np.concatenate([new_X_train, temp_X])
-new_y_train = np.concatenate([new_y_train, temp_y])
 # make sure all images are float 32
 new_X_train = new_X_train.astype(np.float32)
 X_test = X_test.astype(np.float32)
@@ -99,19 +98,25 @@ model.add(Conv2D(32, (3, 3),padding='same',activation='relu',input_shape=(64, 64
 model.add(Conv2D(32, (3, 3),padding='same',activation='relu'))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.25))
 model.add(Conv2D(64,(3,3),padding='same',activation='relu'))
 model.add(Conv2D(64,(3,3),padding='same',activation='relu'))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.25))
 model.add(Conv2D(128,(3,3),padding='same',activation='relu'))
 model.add(Conv2D(128,(3,3),padding='same',activation='relu'))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.25))
+model.add(Conv2D(256,(3,3),padding='same',activation='relu'))
+model.add(Conv2D(256,(3,3),padding='same',activation='relu'))
+model.add(BatchNormalization())
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.25))
 model.add(Flatten())
-model.add(Dense(256,activation='relu', kernel_regularizer=l2(0.01)))
-model.add(Dropout(0.3))
-model.add(Dense(64,activation='relu'))
-model.add(Dropout(0.3))
+model.add(Dense(1024,activation='relu', kernel_regularizer=l2(0.01)))
+model.add(Dense(512,activation='relu'))
 model.add(Dense(4,activation="softmax"))
 # After the model built up, we can compile the model
 model.compile(optimizer=Adam(learning_rate=0.0001), 
@@ -119,24 +124,21 @@ model.compile(optimizer=Adam(learning_rate=0.0001),
              metrics=['accuracy'])
 #fit
 #model.summary()
-checkpoint = ModelCheckpoint('try_best_model.h5', 
+checkpoint = ModelCheckpoint('big_best_model.h5', 
                              monitor='val_accuracy',  
                              save_best_only=True,  
                              mode='max',  #
                              verbose=1)  
-history = model.fit(new_X_train,new_y_train,batch_size=32, epochs=30,validation_split=0.2,callbacks=[checkpoint])
-#best_model = load_model('best_model.h5')
+#history = model.fit(new_X_train,new_y_train,batch_size=64, epochs=30,validation_split=0.2,callbacks=[checkpoint])
+best_model = load_model('big_best_model.h5')
 # predict
-y_pred = model.predict(X_test)
+y_pred = best_model.predict(X_test)
 predicted_labels = np.argmax(y_pred, axis=1)
 y_test = y_test.astype(int)
 # evaluate, f1score / recall /predictions and confusion matrix
 f1_score = classification_report(y_test, predicted_labels)
 confusion  = confusion_matrix(y_test,predicted_labels)
-# print the result
-print(f1_score)
-print(confusion)
-# show the 
+
 #plt.plot(history.history['accuracy'])
 #plt.plot(history.history["val_accuracy"])
 #plt.title("accuracy")
@@ -189,9 +191,10 @@ for i in range(len(labels)):
 
 # Select only the monocrystalline image and calculate the confusion matrix
 monocrystalline_indices = np.where(types == 'mono')[0]
+
 X_test_monocrystalline = X_test[monocrystalline_indices[monocrystalline_indices < len(X_test)]]
 y_test_monocrystalline = y_test[monocrystalline_indices[monocrystalline_indices < len(y_test)]]
-y_pred_monocrystalline = model.predict(X_test_monocrystalline)
+y_pred_monocrystalline = best_model.predict(X_test_monocrystalline)
 predicted_labels_monocrystalline = np.argmax(y_pred_monocrystalline, axis=1)
 # confusion_monocrystalline = confusion_matrix(y_test_monocrystalline, predicted_labels_monocrystalline)
 f1_score_monocrystalline = classification_report(y_test_monocrystalline, predicted_labels_monocrystalline)
@@ -232,7 +235,7 @@ for i in range(len(labels_mono)):
 polycrystalline_indices = np.where(types == 'poly')[0]
 X_test_polycrystalline = X_test[polycrystalline_indices[polycrystalline_indices < len(X_test)]]
 y_test_polycrystalline = y_test[polycrystalline_indices[polycrystalline_indices < len(y_test)]]
-y_pred_polycrystalline = model.predict(X_test_polycrystalline)
+y_pred_polycrystalline = best_model.predict(X_test_polycrystalline)
 predicted_labels_polycrystalline = np.argmax(y_pred_polycrystalline, axis=1)
 # confusion_polycrystalline = confusion_matrix(y_test_polycrystalline, predicted_labels_polycrystalline)
 f1_score_polycrystalline = classification_report(y_test_polycrystalline, predicted_labels_polycrystalline)
@@ -281,13 +284,13 @@ for i in range(len(labels_poly)):
 # Class 3 (Actual) vs Class 2 (Predicted): 3
 # Class 3 (Actual) vs Class 3 (Predicted): 59
 
-plt.plot(history.history['accuracy'])
-plt.plot(history.history["val_accuracy"])
-plt.title("accuracy")
-plt.xlabel("epoch")
-plt.ylabel("accuracy")
-plt.legend(['Train','Test'],loc="upper left")
-plt.show()
+#plt.plot(history.history['accuracy'])
+#plt.plot(history.history["val_accuracy"])
+#plt.title("accuracy")
+#plt.xlabel("epoch")
+#plt.ylabel("accuracy")
+#plt.legend(['Train','Test'],loc="upper left")
+#plt.show()
 
 #plt.plot(history.history['loss'])
 #plt.plot(history.history['val_loss'])
