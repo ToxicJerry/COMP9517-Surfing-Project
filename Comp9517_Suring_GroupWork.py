@@ -158,35 +158,35 @@ for i in range(len(labels)):
 # Confusion Matrix for All Images:
 #               precision    recall  f1-score   support
 
-#            0       0.69      0.90      0.78       377
-#            1       0.35      0.15      0.21        74
-#            2       0.10      0.08      0.09        26
-#            3       0.78      0.50      0.61       179
+#            0       0.75      0.88      0.81       377
+#            1       0.53      0.41      0.46        74
+#            2       0.12      0.04      0.06        26
+#            3       0.74      0.62      0.67       179
 
-#     accuracy                           0.67       656
-#    macro avg       0.48      0.41      0.42       656
-# weighted avg       0.65      0.67      0.64       656
+#     accuracy                           0.72       656
+#    macro avg       0.53      0.49      0.50       656
+# weighted avg       0.70      0.72      0.70       656
 
-# [[340   9   9  19]
-#  [ 57  11   4   2]
-#  [ 18   2   2   4]
-#  [ 76   9   5  89]]
-# Class 0 (Actual) vs Class 0 (Predicted): 340
-# Class 0 (Actual) vs Class 1 (Predicted): 9
-# Class 0 (Actual) vs Class 2 (Predicted): 9
-# Class 0 (Actual) vs Class 3 (Predicted): 19
-# Class 1 (Actual) vs Class 0 (Predicted): 57
-# Class 1 (Actual) vs Class 1 (Predicted): 11
-# Class 1 (Actual) vs Class 2 (Predicted): 4
-# Class 1 (Actual) vs Class 3 (Predicted): 2
-# Class 2 (Actual) vs Class 0 (Predicted): 18
-# Class 2 (Actual) vs Class 1 (Predicted): 2
-# Class 2 (Actual) vs Class 2 (Predicted): 2
-# Class 2 (Actual) vs Class 3 (Predicted): 4
-# Class 3 (Actual) vs Class 0 (Predicted): 76
-# Class 3 (Actual) vs Class 1 (Predicted): 9
-# Class 3 (Actual) vs Class 2 (Predicted): 5
-# Class 3 (Actual) vs Class 3 (Predicted): 89
+# [[331  14   3  29]
+#  [ 38  30   1   5]
+#  [ 16   3   1   6]
+#  [ 55  10   3 111]]
+# Class 0 (Actual) vs Class 0 (Predicted): 331
+# Class 0 (Actual) vs Class 1 (Predicted): 14
+# Class 0 (Actual) vs Class 2 (Predicted): 3
+# Class 0 (Actual) vs Class 3 (Predicted): 29
+# Class 1 (Actual) vs Class 0 (Predicted): 38
+# Class 1 (Actual) vs Class 1 (Predicted): 30
+# Class 1 (Actual) vs Class 2 (Predicted): 1
+# Class 1 (Actual) vs Class 3 (Predicted): 5
+# Class 2 (Actual) vs Class 0 (Predicted): 16
+# Class 2 (Actual) vs Class 1 (Predicted): 3
+# Class 2 (Actual) vs Class 2 (Predicted): 1
+# Class 2 (Actual) vs Class 3 (Predicted): 6
+# Class 3 (Actual) vs Class 0 (Predicted): 55
+# Class 3 (Actual) vs Class 1 (Predicted): 10
+# Class 3 (Actual) vs Class 2 (Predicted): 3
+# Class 3 (Actual) vs Class 3 (Predicted): 111
 
 
 # Select only the monocrystalline image and calculate the confusion matrix
@@ -213,23 +213,23 @@ for i in range(len(labels_mono)):
 # Confusion Matrix for Monocrystalline Images:
 #               precision    recall  f1-score   support
 
-#            0       0.67      0.89      0.76       135
-#            1       0.44      0.12      0.20        32
-#            2       0.10      0.11      0.11         9
-#            3       0.73      0.47      0.57        64
+#            0       0.74      0.84      0.79       135
+#            1       0.46      0.38      0.41        32
+#            2       0.00      0.00      0.00         9
+#            3       0.72      0.67      0.69        64
 
-#     accuracy                           0.65       240
-#    macro avg       0.49      0.40      0.41       240
-# weighted avg       0.63      0.65      0.61       240
+#     accuracy                           0.70       240
+#    macro avg       0.48      0.47      0.47       240
+# weighted avg       0.67      0.70      0.68       240
 
-# [[120   2   4   9]
-#  [ 25   4   3   0]
-#  [  6   0   1   2]
-#  [ 29   3   2  30]]
-# Class 0 (Actual) vs Class 0 (Predicted): 120
-# Class 0 (Actual) vs Class 1 (Predicted): 2
-# Class 1 (Actual) vs Class 0 (Predicted): 25
-# Class 1 (Actual) vs Class 1 (Predicted): 4
+# [[114   9   0  12]
+#  [ 17  12   0   3]
+#  [  5   2   0   2]
+#  [ 18   3   0  43]]
+# Class 0 (Actual) vs Class 0 (Predicted): 114
+# Class 0 (Actual) vs Class 1 (Predicted): 9
+# Class 1 (Actual) vs Class 0 (Predicted): 17
+# Class 1 (Actual) vs Class 1 (Predicted): 12
 
 # Select only the polycrystalline images and calculate the confusion matrix
 polycrystalline_indices = np.where(types == 'poly')[0]
@@ -254,35 +254,35 @@ for i in range(len(labels_poly)):
 # Confusion Matrix for Polycrystalline Images:
 #               precision    recall  f1-score   support
 
-#            0       0.71      0.91      0.80       242
-#            1       0.32      0.17      0.22        42
-#            2       0.10      0.06      0.07        17
-#            3       0.81      0.51      0.63       115
+#            0       0.76      0.90      0.82       242
+#            1       0.58      0.43      0.49        42
+#            2       0.12      0.06      0.08        17
+#            3       0.75      0.59      0.66       115
 
-#     accuracy                           0.69       416
-#    macro avg       0.48      0.41      0.43       416
-# weighted avg       0.67      0.69      0.66       416
+#     accuracy                           0.73       416
+#    macro avg       0.55      0.49      0.51       416
+# weighted avg       0.71      0.73      0.71       416
 
-# [[220   7   5  10]
-#  [ 32   7   1   2]
-#  [ 12   2   1   2]
-#  [ 47   6   3  59]]
-# Class 0 (Actual) vs Class 0 (Predicted): 220
-# Class 0 (Actual) vs Class 1 (Predicted): 7
-# Class 0 (Actual) vs Class 2 (Predicted): 5
-# Class 0 (Actual) vs Class 3 (Predicted): 10
-# Class 1 (Actual) vs Class 0 (Predicted): 32
-# Class 1 (Actual) vs Class 1 (Predicted): 7
+# [[217   5   3  17]
+#  [ 21  18   1   2]
+#  [ 11   1   1   4]
+#  [ 37   7   3  68]]
+# Class 0 (Actual) vs Class 0 (Predicted): 217
+# Class 0 (Actual) vs Class 1 (Predicted): 5
+# Class 0 (Actual) vs Class 2 (Predicted): 3
+# Class 0 (Actual) vs Class 3 (Predicted): 17
+# Class 1 (Actual) vs Class 0 (Predicted): 21
+# Class 1 (Actual) vs Class 1 (Predicted): 18
 # Class 1 (Actual) vs Class 2 (Predicted): 1
 # Class 1 (Actual) vs Class 3 (Predicted): 2
-# Class 2 (Actual) vs Class 0 (Predicted): 12
-# Class 2 (Actual) vs Class 1 (Predicted): 2
+# Class 2 (Actual) vs Class 0 (Predicted): 11
+# Class 2 (Actual) vs Class 1 (Predicted): 1
 # Class 2 (Actual) vs Class 2 (Predicted): 1
-# Class 2 (Actual) vs Class 3 (Predicted): 2
-# Class 3 (Actual) vs Class 0 (Predicted): 47
-# Class 3 (Actual) vs Class 1 (Predicted): 6
+# Class 2 (Actual) vs Class 3 (Predicted): 4
+# Class 3 (Actual) vs Class 0 (Predicted): 37
+# Class 3 (Actual) vs Class 1 (Predicted): 7
 # Class 3 (Actual) vs Class 2 (Predicted): 3
-# Class 3 (Actual) vs Class 3 (Predicted): 59
+# Class 3 (Actual) vs Class 3 (Predicted): 68
 
 #plt.plot(history.history['accuracy'])
 #plt.plot(history.history["val_accuracy"])
