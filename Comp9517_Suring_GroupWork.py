@@ -121,12 +121,12 @@ model.compile(optimizer=Adam(learning_rate=0.0001),
              metrics=['accuracy'])
 #fit
 #model.summary()
-checkpoint = ModelCheckpoint('big_best_model.h5', 
+checkpoint = ModelCheckpoint('new_best_model.h5', 
                              monitor='val_accuracy',  
                              save_best_only=True,  
                              mode='max',  #
                              verbose=1)  
-#history = model.fit(new_X_train,new_y_train,batch_size=64, epochs=30,validation_split=0.2,callbacks=[checkpoint])
+history = model.fit(new_X_train,new_y_train,batch_size=64, epochs=30,validation_split=0.2,callbacks=[checkpoint])
 best_model = load_model('big_best_model.h5')
 # predict
 y_pred = best_model.predict(X_test)
