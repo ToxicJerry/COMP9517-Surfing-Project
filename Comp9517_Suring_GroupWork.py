@@ -154,6 +154,18 @@ for i in range(len(labels)):
     for j in range(len(labels)):
         label_str = f"{labels[i]} (Actual) vs {labels[j]} (Predicted)"
         print(f"{label_str}: {confusion[i, j]}")
+# Calculate accuracy for each class
+accuracy_class_0 = confusion[0, 0] / np.sum(confusion[0, :])
+accuracy_class_1 = confusion[1, 1] / np.sum(confusion[1, :])
+accuracy_class_2 = confusion[2, 2] / np.sum(confusion[2, :])
+accuracy_class_3 = confusion[3, 3] / np.sum(confusion[3, :])
+
+# Print the results with accuracy
+print(f"Class 0 (Accuracy): {accuracy_class_0:.2%}")
+print(f"Class 1 (Accuracy): {accuracy_class_1:.2%}")
+print(f"Class 2 (Accuracy): {accuracy_class_2:.2%}")
+print(f"Class 3 (Accuracy): {accuracy_class_3:.2%}")
+
 # Test Result:
 # Confusion Matrix for All Images:
 #               precision    recall  f1-score   support
@@ -187,7 +199,10 @@ for i in range(len(labels)):
 # Class 3 (Actual) vs Class 1 (Predicted): 10
 # Class 3 (Actual) vs Class 2 (Predicted): 3
 # Class 3 (Actual) vs Class 3 (Predicted): 111
-
+# Class 0 (Accuracy): 87.80%
+# Class 1 (Accuracy): 40.54%
+# Class 2 (Accuracy): 3.85%
+# Class 3 (Accuracy): 62.01%
 
 # Select only the monocrystalline image and calculate the confusion matrix
 monocrystalline_indices = np.where(types == 'mono')[0]
@@ -209,6 +224,17 @@ for i in range(len(labels_mono)):
     for j in range(len(labels_mono)):
         label_str = f"{labels_mono[i]} (Actual) vs {labels_mono[j]} (Predicted)"
         print(f"{label_str}: {confusion_monocrystalline[i, j]}")
+# Calculate accuracy for monocrystalline class
+accuracy_mono_class_0 = confusion_monocrystalline[0, 0] / np.sum(confusion_monocrystalline[0, :])
+accuracy_mono_class_1 = confusion_monocrystalline[1, 1] / np.sum(confusion_monocrystalline[1, :])
+accuracy_mono_class_2 = confusion_monocrystalline[2, 2] / np.sum(confusion_monocrystalline[2, :])
+accuracy_mono_class_3 = confusion_monocrystalline[3, 3] / np.sum(confusion_monocrystalline[3, :])
+
+# Print the results with accuracy for monocrystalline
+print(f"Monocrystalline Class 0 (Accuracy): {accuracy_mono_class_0:.2%}")
+print(f"Monocrystalline Class 1 (Accuracy): {accuracy_mono_class_1:.2%}")
+print(f"Monocrystalline Class 2 (Accuracy): {accuracy_mono_class_2:.2%}")
+print(f"Monocrystalline Class 3 (Accuracy): {accuracy_mono_class_3:.2%}")
 # Test Result:
 # Confusion Matrix for Monocrystalline Images:
 #               precision    recall  f1-score   support
@@ -230,6 +256,10 @@ for i in range(len(labels_mono)):
 # Class 0 (Actual) vs Class 1 (Predicted): 9
 # Class 1 (Actual) vs Class 0 (Predicted): 17
 # Class 1 (Actual) vs Class 1 (Predicted): 12
+# Monocrystalline Class 0 (Accuracy): 84.44%
+# Monocrystalline Class 1 (Accuracy): 37.50%
+# Monocrystalline Class 2 (Accuracy): 0.00%
+# Monocrystalline Class 3 (Accuracy): 67.19%
 
 # Select only the polycrystalline images and calculate the confusion matrix
 polycrystalline_indices = np.where(types == 'poly')[0]
@@ -250,6 +280,17 @@ for i in range(len(labels_poly)):
     for j in range(len(labels_poly)):
         label_str = f"{labels_poly[i]} (Actual) vs {labels_poly[j]} (Predicted)"
         print(f"{label_str}: {confusion_polycrystalline[i, j]}")
+# Calculate accuracy for polycrystalline class
+accuracy_poly_class_0 = confusion_polycrystalline[0, 0] / np.sum(confusion_polycrystalline[0, :])
+accuracy_poly_class_1 = confusion_polycrystalline[1, 1] / np.sum(confusion_polycrystalline[1, :])
+accuracy_poly_class_2 = confusion_polycrystalline[2, 2] / np.sum(confusion_polycrystalline[2, :])
+accuracy_poly_class_3 = confusion_polycrystalline[3, 3] / np.sum(confusion_polycrystalline[3, :])
+
+# Print the results with accuracy for polycrystalline
+print(f"Polycrystalline Class 0 (Accuracy): {accuracy_poly_class_0:.2%}")
+print(f"Polycrystalline Class 1 (Accuracy): {accuracy_poly_class_1:.2%}")
+print(f"Polycrystalline Class 2 (Accuracy): {accuracy_poly_class_2:.2%}")
+print(f"Polycrystalline Class 3 (Accuracy): {accuracy_poly_class_3:.2%}")
 # Test Result:
 # Confusion Matrix for Polycrystalline Images:
 #               precision    recall  f1-score   support
@@ -283,6 +324,10 @@ for i in range(len(labels_poly)):
 # Class 3 (Actual) vs Class 1 (Predicted): 7
 # Class 3 (Actual) vs Class 2 (Predicted): 3
 # Class 3 (Actual) vs Class 3 (Predicted): 68
+# Polycrystalline Class 0 (Accuracy): 89.67%
+# Polycrystalline Class 1 (Accuracy): 42.86%
+# Polycrystalline Class 2 (Accuracy): 5.88%
+# Polycrystalline Class 3 (Accuracy): 59.13%
 
 #plt.plot(history.history['accuracy'])
 #plt.plot(history.history["val_accuracy"])
