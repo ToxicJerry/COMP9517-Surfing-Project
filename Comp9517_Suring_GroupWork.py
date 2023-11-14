@@ -342,3 +342,33 @@ print(f"Polycrystalline Class 3 (Accuracy): {accuracy_poly_class_3:.2%}")
 #plt.title("Loss")
 #plt.legend(['Train','Test'],loc="upper left")
 #plt.show()
+
+
+
+
+# Find the index of the successfully classified images
+success_indices = np.where(y_test == predicted_labels)[0]
+
+# Randomly select an image with successful classification for visualization
+success_index = np.random.choice(success_indices)
+success_image = X_test[success_index]
+
+# Show image 
+plt.imshow(success_image.squeeze(), cmap='gray')  # 如果是灰度图，使用cmap='gray'
+plt.title(f"True Label: {y_test[success_index]}, Predicted Label: {predicted_labels[success_index]}")
+plt.show()
+
+
+
+# Find the index of the image whose classification was unsuccessful
+failure_indices = np.where(y_test != predicted_labels)[0]
+
+# An image with unsuccessful classification is randomly selected for visualization
+failure_index = np.random.choice(failure_indices)
+failure_image = X_test[failure_index]
+
+# Show image 
+plt.imshow(failure_image.squeeze(), cmap='gray')  # 如果是灰度图，使用cmap='gray'
+plt.title(f"True Label: {y_test[failure_index]}, Predicted Label: {predicted_labels[failure_index]}")
+plt.show()
+
