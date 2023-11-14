@@ -354,7 +354,7 @@ success_index = np.random.choice(success_indices)
 success_image = X_test[success_index]
 
 # Show image 
-plt.imshow(success_image.squeeze(), cmap='gray')  # 如果是灰度图，使用cmap='gray'
+plt.imshow(success_image.squeeze(), cmap='gray')
 plt.title(f"True Label: {y_test[success_index]}, Predicted Label: {predicted_labels[success_index]}")
 plt.show()
 
@@ -368,7 +368,7 @@ failure_index = np.random.choice(failure_indices)
 failure_image = X_test[failure_index]
 
 # Show image 
-plt.imshow(failure_image.squeeze(), cmap='gray')  # 如果是灰度图，使用cmap='gray'
+plt.imshow(failure_image.squeeze(), cmap='gray')
 plt.title(f"True Label: {y_test[failure_index]}, Predicted Label: {predicted_labels[failure_index]}")
 plt.show()
 
